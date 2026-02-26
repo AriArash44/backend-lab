@@ -1,12 +1,13 @@
-package internal
+package token
 
 import (
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtSecret = []byte("super-secret-key")
+var jwtSecret = []byte(os.Getenv("SECRET_KEY"))
 
 func Generate(username string) (string, error) {
 	claims := jwt.MapClaims{
@@ -19,7 +20,7 @@ func Generate(username string) (string, error) {
 }
 
 func Validate(tokenString string) (*jwt.Token, error) {
-	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	return jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		return jwtSecret, nil
 	})
 }
